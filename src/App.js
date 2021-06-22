@@ -12,13 +12,16 @@ import "./App.css";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userId,setUserId] = useState(null);
 
-  const login = useCallback(() => {
+  const login = useCallback((uid) => {
     setIsLoggedIn(true);
+    setUserId(uid);
   }, []);
 
   const logout = useCallback(() => {
     setIsLoggedIn(false);
+    setUserId(null);
   }, []);
 
   const route1 = (
@@ -58,7 +61,7 @@ function App() {
   return (
     <div className="app">
       <AuthContext.Provider
-        value={{ isLoggedIn: isLoggedIn, login: login, logout: logout }}
+        value={{ isLoggedIn: isLoggedIn,userId:userId, login: login, logout: logout }}
       >
         <MainNavigation />
         {routes}

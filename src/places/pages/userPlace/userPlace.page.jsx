@@ -1,38 +1,37 @@
-import React from "react";
-import {useParams} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useHttpClient } from "../../../shared/hooks/http-hook.js";
+import ErrorModal from "../../../shared/uiElements/ErrorModal.jsx";
+import LoadingSpinner from "../../../shared/uiElements/LoadingSpinner.jsx";
+import { useParams } from "react-router-dom";
 import PlaceList from "../../component/placeList/placeList.component.jsx";
 
 import "./userPlace.styles.css";
 
-
-const UserPlace = () =>{
-    const places = [
-        {
-           id:"p1",
-           title:"Sajek",
-           address:"bandarban sajek chittagong",
-           image:"https://lh5.googleusercontent.com/p/AF1QipMTZWalB_R23PxKdMsYaxHW7uyvmS137XzSBGkU=w408-h271-k-no",
-           description:"This is one of the best hilltracks in Bangladesh, that is being visited by tourists",
-           co_ordinantes:[23.3819926,92.2938229],
-           creator:"u1"
-        },
-        {
-            id:"p2",
-            title:"Sajek",
-            address:"bandarban sajek chittagong",
-            image:"https://lh5.googleusercontent.com/p/AF1QipMTZWalB_R23PxKdMsYaxHW7uyvmS137XzSBGkU=w408-h271-k-no",
-            description:"This is one of the best hilltracks in Bangladesh, that is being visited by tourists",
-            co_ordinantes:[23.3819926,92.2938229],
-            creator:"u2"
-         }
-    ]
-    const userId = useParams().userId;
-    const loadedPlace = places.filter(place=>place.creator===userId)
-    return (
-        <div className="user_place">
-            <PlaceList items={loadedPlace}/>
-        </div>
-    )
-}
+const UserPlace = () => {
+  const userId = useParams().userId;
+  const { isLoading, errMsg, sendRequest, errorHandler } = useHttpClient();
+  const [loadedPlace, setLoadedPlace] = useState();
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const data = await sendRequest(
+          `http://localhost:5000/api/places/user/${userId}`
+        );
+        setLoadedPlace(data.places);
+        console.log(data);
+      } catch (err) {}
+    };
+    fetchUser();
+  }, [sendRequest]);
+  return (
+    <React.Fragment>
+      <ErrorModal error={errMsg} onClear={errorHandler} />
+      <div className="user_place">
+        {isLoading && <LoadingSpinner asOverlay />}
+        {!isLoading && loadedPlace && <PlaceList items={loadedPlace} />}
+      </div>
+    </React.Fragment>
+  );
+};
 
 export default UserPlace;
