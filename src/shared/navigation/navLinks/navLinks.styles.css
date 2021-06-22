@@ -1,0 +1,28 @@
+.nav_link {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.drawer_nav {
+  flex-direction: column !important;
+  align-items: center;
+  margin-left: 0px;
+}
+.drawer_nav li {
+  margin-top: 10px;
+}
+.nav_link li {
+  margin-left: 20px;
+  margin-right: 10px;
+}
+.nav_link a {
+  font-family: monospace;
+  padding: 10px;
+  border-radius: 5px;
+}
+.nav_link a:hover,
+.nav_link a.active {
+  background-color: #118980;
+  color: white;
+}
