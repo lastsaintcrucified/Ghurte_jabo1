@@ -1,4 +1,8 @@
 import React, { useState, useContext } from "react";
+import {useParams} from "react-router-dom";
+import { useHttpClient } from "../../../shared/hooks/http-hook.js";
+import ErrorModal from "../../../shared/uiElements/ErrorModal.jsx";
+import LoadingSpinner from "../../../shared/uiElements/LoadingSpinner.jsx";
 import Avatar from "../../../shared/uiElements/avatar.component.jsx";
 import CustomButton from "../../../shared/uiElements/customButton.component.jsx";
 import Modal from "../../../shared/uiElements/modal.component.jsx";
@@ -8,6 +12,8 @@ import "./placeItem.styles.css";
 
 const PlaceItem = (props) => {
   const auth = useContext(AuthContext);
+  const userId = useParams().userId;
+  const { isLoading, errMsg, sendRequest, errorHandler } = useHttpClient();
   const [showMap, setSHowMap] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
 
@@ -25,12 +31,16 @@ const PlaceItem = (props) => {
     setShowDelete(false);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     setShowDelete(false);
-    console.log("deleted");
+    try{
+      await sendRequest(`http://localhost:5000/api/places/${props.id}`,"DELETE");
+      props.onDelete(props.id);
+    }catch(err){}
   };
   return (
     <React.Fragment>
+      <ErrorModal error={errMsg} onClear={errorHandler}/>
       <Modal
         show={showMap}
         close={closeMapModal}
@@ -71,6 +81,7 @@ const PlaceItem = (props) => {
         </div>
       </Modal>
       <div className="place_item">
+        {isLoading && <LoadingSpinner asOverlay/>}
         <Avatar
           className="place_image"
           image={props.image}
@@ -83,12 +94,12 @@ const PlaceItem = (props) => {
         </div>
         <div className="place_item_button">
           <CustomButton onClick={openMapModal}>View On Map</CustomButton>
-          {auth.isLoggedIn && (
+          {auth.userId === userId && (
             <CustomButton to={`/places/${props.id}`} className="edit">
               Edit
             </CustomButton>
           )}
-          {auth.isLoggedIn && (
+          {auth.userId === userId && (
             <CustomButton onClick={openDeleteModal} className="delete">
               Delete
             </CustomButton>

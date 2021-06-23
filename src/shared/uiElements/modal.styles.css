@@ -1,14 +1,14 @@
 .modal {
   height: 65vh;
   width: 55vw;
-  top: 30vh;
+  top: 10vh;
   left: 19vw;
   background-color: white;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  position: absolute;
+  position: fixed;
   z-index: 100;
   box-shadow: 10px 10px 10px black;
   border-radius: 5px;

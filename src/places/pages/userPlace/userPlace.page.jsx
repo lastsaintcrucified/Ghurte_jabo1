@@ -18,17 +18,21 @@ const UserPlace = () => {
           `http://localhost:5000/api/places/user/${userId}`
         );
         setLoadedPlace(data.places);
-        console.log(data);
+        // console.log(data);
       } catch (err) {}
     };
     fetchUser();
   }, [sendRequest]);
+
+  const placeDeleteHandler = (deletedPlaceId) =>{
+      setLoadedPlace(prevPlaces=>prevPlaces.filter(place=>place.id!==deletedPlaceId))
+  }
   return (
     <React.Fragment>
       <ErrorModal error={errMsg} onClear={errorHandler} />
       <div className="user_place">
         {isLoading && <LoadingSpinner asOverlay />}
-        {!isLoading && loadedPlace && <PlaceList items={loadedPlace} />}
+        {!isLoading && loadedPlace && <PlaceList items={loadedPlace} onDeletePlace={placeDeleteHandler}/>}
       </div>
     </React.Fragment>
   );
