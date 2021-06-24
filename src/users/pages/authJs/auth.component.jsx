@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import Input from "../../../shared/uiElements/input.component.jsx";
 import { useForm } from "../../../shared/hooks/form-hook.js";
 import { useHttpClient } from "../../../shared/hooks/http-hook.js";
+import ImageUpload from "../../../shared/uiElements/imageUpload.component.jsx";
 import CustomButton from "../../../shared/uiElements/customButton.component.jsx";
 import LoadingSpinner from "../../../shared/uiElements/LoadingSpinner.jsx";
 import ErrorModal from "../../../shared/uiElements/ErrorModal.jsx";
@@ -66,7 +67,7 @@ const Auth = () => {
             "Content-Type": "application/json",
           }
         );
-          console.log(data);
+        console.log(data);
         auth.login(data.user.id);
       } catch (err) {}
     }
@@ -114,6 +115,7 @@ const Auth = () => {
               onInput={inputHandler}
             />
           )}
+          {!loginMode && <ImageUpload id="image" center />}
           <Input
             id="email"
             element="input"

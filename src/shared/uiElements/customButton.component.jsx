@@ -9,6 +9,7 @@ const CustomButton = (props) => {
         <button
           to={`${props.to}`}
           disabled={props.disabled}
+         
           onClick={props.onClick}
           className={
             props.disabled
@@ -25,6 +26,7 @@ const CustomButton = (props) => {
     <button
       to={`${props.to}`}
       disabled={props.disabled}
+      type={props.button && "button"}
       onClick={props.onClick}
       className={
         props.disabled ? "disabled_class" : `custom_button ${props.className}`
