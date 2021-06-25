@@ -1,4 +1,5 @@
 const httpError = require("../models/http-error");
+const fs = require("fs");
 const Place = require("../models/places.schema");
 const User = require("../models/user.schema");
 const getCoOrdForAddress = require("../utils/location");
@@ -142,13 +143,14 @@ const updatePlace = async (req, res, next) => {
 const deletePlace = async (req, res, next) => {
   const placeId = req.params.pid;
   let place;
+  
   try {
     place = await Place.findById(placeId).populate("creator");
   } catch (err) {
     const error = new httpError("Could not delete", 500);
     return next(error);
   }
-
+  const imagePath = place.image;
   if (!place) {
     const error = new httpError("Could not find place", 404);
     return next(error);
@@ -164,6 +166,9 @@ const deletePlace = async (req, res, next) => {
     const error = new httpError("Something went wrong", 500);
     return next(error);
   }
+  fs.unlink(imagePath,err=>{
+    console.log(err)
+  })
   res.status(200).json({ message: "Place deleted" });
 };
 
