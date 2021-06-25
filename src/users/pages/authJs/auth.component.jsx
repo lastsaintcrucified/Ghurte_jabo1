@@ -34,7 +34,7 @@ const Auth = () => {
   );
   const submitHandler = async (event) => {
     event.preventDefault();
-    console.log(state.inputs)
+    console.log(state.inputs);
 
     if (loginMode) {
       try {
@@ -56,17 +56,15 @@ const Auth = () => {
       // console.log(loginData)
     } else {
       try {
+        const formData = new FormData();
+        formData.append("email", state.inputs.email.value);
+        formData.append("name", state.inputs.name.value);
+        formData.append("password", state.inputs.password.value);
+        formData.append("image", state.inputs.image.value);
         const data = await sendRequest(
           "http://localhost:5000/api/users/signup",
           "POST",
-          JSON.stringify({
-            name: state.inputs.name.value,
-            email: state.inputs.email.value,
-            password: state.inputs.password.value,
-          }),
-          {
-            "Content-Type": "application/json",
-          }
+          formData
         );
         console.log(data);
         auth.login(data.user.id);
@@ -81,7 +79,7 @@ const Auth = () => {
         {
           ...state.inputs,
           name: undefined,
-          image:undefined
+          image: undefined,
         },
         state.inputs.email.isValid && state.inputs.password.isValid
       );
@@ -93,10 +91,10 @@ const Auth = () => {
             value: "",
             isValid: false,
           },
-          image:{
-            value:null,
-            isValid:false
-          }
+          image: {
+            value: null,
+            isValid: false,
+          },
         },
         false
       );
@@ -121,7 +119,14 @@ const Auth = () => {
               onInput={inputHandler}
             />
           )}
-          {!loginMode && <ImageUpload id="image" center onInput={inputHandler}/>}
+          {!loginMode && (
+            <ImageUpload
+              id="image"
+              center
+              onInput={inputHandler}
+              errorText="please provide an image"
+            />
+          )}
           <Input
             id="email"
             element="input"

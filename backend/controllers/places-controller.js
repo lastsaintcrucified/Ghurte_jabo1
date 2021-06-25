@@ -77,10 +77,9 @@ const createPlace = async (req, res, next) => {
   const createdPlace = new Place({
     title,
     description,
-    co_ordinantes: co_ordinates,
+    co_ordinates: co_ordinates,
     address,
-    image:
-      "https://lh5.googleusercontent.com/p/AF1QipMTZWalB_R23PxKdMsYaxHW7uyvmS137XzSBGkU=w408-h271-k-no",
+    image: req.file.path,
     creator,
   });
   let user;

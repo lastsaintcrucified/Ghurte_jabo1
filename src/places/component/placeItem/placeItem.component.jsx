@@ -38,6 +38,7 @@ const PlaceItem = (props) => {
       props.onDelete(props.id);
     }catch(err){}
   };
+  console.log(props)
   return (
     <React.Fragment>
       <ErrorModal error={errMsg} onClear={errorHandler}/>
@@ -84,7 +85,7 @@ const PlaceItem = (props) => {
         {isLoading && <LoadingSpinner asOverlay/>}
         <Avatar
           className="place_image"
-          image={props.image}
+          image={`http://localhost:5000/${props.image}`}
           name={props.title}
         />
         <div className="place_item_info">

@@ -1,7 +1,8 @@
 
 .user_list {
   margin-top: 50px;
-  display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   justify-content: space-around;
 }

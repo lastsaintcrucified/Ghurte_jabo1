@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { useForm } from "../../../shared/hooks/form-hook.js";
 import { useHttpClient } from "../../../shared/hooks/http-hook.js";
+import ImageUpload from "../../../shared/uiElements/imageUpload.component.jsx";
 import ErrorModal from "../../../shared/uiElements/ErrorModal.jsx";
 import LoadingSpinner from "../../../shared/uiElements/LoadingSpinner.jsx";
 import { AuthContext } from "../../../shared/context/auth-context.js";
@@ -32,6 +33,10 @@ const NewPlace = () => {
         value: "",
         isValid: false,
       },
+      image:{
+        value:null,
+        isValid:false
+      }
     },
     false
   );
@@ -40,18 +45,16 @@ const NewPlace = () => {
     event.preventDefault();
     console.log("state-->", state);
     try {
+      const formData = new FormData();
+      formData.append("title", state.inputs.title.value);
+      formData.append("description", state.inputs.description.value);
+      formData.append("address", state.inputs.address.value);
+      formData.append("creator",  auth.userId);
+      formData.append("image", state.inputs.image.value);
       const data = await sendRequest(
         "http://localhost:5000/api/places",
         "POST",
-        JSON.stringify({
-          title: state.inputs.title.value,
-          description: state.inputs.description.value,
-          address: state.inputs.address.value,
-          creator: auth.userId,
-        }),
-        {
-          "Content-Type": "application/json",
-        }
+        formData
       );
       console.log(data);
       history.push("/");
@@ -74,6 +77,12 @@ const NewPlace = () => {
             errorText="Please give a valid title"
             validators={[VALIDATOR_REQUIRE()]}
             onInput={inputHandler}
+          />
+          <ImageUpload
+            id="image"
+            center
+            onInput={inputHandler}
+            errorText="please provide an image"
           />
           <Input
             type="text"

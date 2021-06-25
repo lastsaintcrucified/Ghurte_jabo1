@@ -10,18 +10,19 @@ const map_container = {
 }
 
 const Map =(props)=>{
-    const {center} = props;
+    
     const Map = ReactMapboxGl({
         accessToken:
           'pk.eyJ1IjoidGF3aGlkMzEzIiwiYSI6ImNra2Fqamw5MTAwdDAydm94aWd0OHBuZ2gifQ.vK7q9HprbQ8UqUMPSeOiZQ'
       })
+      console.log(props.center)
     return (
         <Map
             style="mapbox://styles/mapbox/streets-v9"
             containerStyle={map_container}
         >
             <Layer type="symbol" id="marker" layout={{ 'icon-image': 'marker-15' }}>
-                <Feature coordinates={center} />
+                <Feature coordinates={props.center} />
             </Layer>
         </Map>
     )
