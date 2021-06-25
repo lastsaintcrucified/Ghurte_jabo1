@@ -15,14 +15,15 @@ const Map =(props)=>{
         accessToken:
           'pk.eyJ1IjoidGF3aGlkMzEzIiwiYSI6ImNra2Fqamw5MTAwdDAydm94aWd0OHBuZ2gifQ.vK7q9HprbQ8UqUMPSeOiZQ'
       })
-      console.log(props.center)
+      
     return (
         <Map
             style="mapbox://styles/mapbox/streets-v9"
             containerStyle={map_container}
+            center={props.center}
         >
             <Layer type="symbol" id="marker" layout={{ 'icon-image': 'marker-15' }}>
-                <Feature coordinates={props.center} />
+                <Feature />
             </Layer>
         </Map>
     )
