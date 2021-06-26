@@ -34,7 +34,7 @@ const Auth = () => {
   );
   const submitHandler = async (event) => {
     event.preventDefault();
-    console.log(state.inputs);
+    // console.log(state.inputs);
 
     if (loginMode) {
       try {
@@ -50,7 +50,7 @@ const Auth = () => {
           }
         );
         console.log(data);
-        auth.login(data.user.id);
+        auth.login(data.userId,data.token);
       } catch (error) {}
 
       // console.log(loginData)
@@ -67,7 +67,7 @@ const Auth = () => {
           formData
         );
         console.log(data);
-        auth.login(data.user.id);
+        auth.login(data.userId,data.token);
       } catch (err) {}
     }
   };

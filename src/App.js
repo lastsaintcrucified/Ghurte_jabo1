@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback,useEffect } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import NewPlace from "./places/pages/newPlace/newPlace.page.jsx";
 import UserPlace from "./places/pages/userPlace/userPlace.page.jsx";
@@ -11,18 +11,29 @@ import { AuthContext } from "./shared/context/auth-context.js";
 import "./App.css";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userId,setUserId] = useState(null);
+  const [token, setToken] = useState();
+  const [userId, setUserId] = useState(null);
 
-  const login = useCallback((uid) => {
-    setIsLoggedIn(true);
+  const login = useCallback((uid, token) => {
+    setToken(token);
     setUserId(uid);
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({ userId: uid, token: token })
+    );
   }, []);
 
   const logout = useCallback(() => {
-    setIsLoggedIn(false);
+    setToken(null);
     setUserId(null);
+    localStorage.removeItem('userData');
   }, []);
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem('userData'));
+    if (storedData && storedData.token) {
+      login(storedData.userId, storedData.token);
+    }
+  }, [login]);
 
   const route1 = (
     <Switch>
@@ -53,15 +64,20 @@ function App() {
         <Auth />
       </Route>
       <Redirect to="/auth" />
-
     </Switch>
   );
-  let routes = isLoggedIn ? route1 : route2;
+  let routes = token ? route1 : route2;
 
   return (
     <div className="app">
       <AuthContext.Provider
-        value={{ isLoggedIn: isLoggedIn,userId:userId, login: login, logout: logout }}
+        value={{
+          isLoggedIn: !!token,
+          token: token,
+          userId: userId,
+          login: login,
+          logout: logout,
+        }}
       >
         <MainNavigation />
         {routes}

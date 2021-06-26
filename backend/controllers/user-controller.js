@@ -1,4 +1,6 @@
 const { v4: uuidv4 } = require("uuid");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const User = require("../models/user.schema");
 const { validationResult } = require("express-validator");
 const httpError = require("../models/http-error");
@@ -70,11 +72,21 @@ const signUp = async (req, res, next) => {
     const error = new httpError("User already exist!", 422);
     return next(error);
   }
+  let hashedPassword;
+  try {
+    hashedPassword = await bcrypt.hash(password, 12);
+  } catch (err) {
+    const error = new httpError(
+      "Signing Up failed ,please try again later",
+      500
+    );
+    return next(error);
+  }
   const createdUser = new User({
     name,
     email,
-    password,
-    image:req.file.path,
+    password: hashedPassword,
+    image: req.file.path,
     places: [],
   });
   try {
@@ -83,7 +95,25 @@ const signUp = async (req, res, next) => {
     const error = new httpError("Signing Up failed!", 500);
     return next(error);
   }
-  res.status(201).json({ user: createdUser.toObject({ getters: true }) });
+
+  let token;
+  try {
+    token = jwt.sign(
+      {
+        userId: createdUser.id,
+        email: createdUser.email,
+      },
+      "secret_within_secret",
+      {
+        expiresIn: "1h",
+      }
+    );
+  } catch (err) {
+    const error = new httpError("Signing Up failed!", 500);
+    return next(error);
+  }
+
+  res.status(201).json({ userId:createdUser.id,email:createdUser.email,token:token });
 };
 
 const login = async (req, res, next) => {
@@ -98,12 +128,12 @@ const login = async (req, res, next) => {
     existingUser = await User.findOne({ email: email });
   } catch (err) {
     const error = new httpError(
-      "Signing Up failed ,please try again later",
+      "logging in failed ,please try again later",
       500
     );
     return next(error);
   }
-  if (!existingUser || existingUser.password !== password) {
+  if (!existingUser) {
     return next(
       new httpError(
         "Couldn't identify user, credintials seems to be wrong",
@@ -111,7 +141,43 @@ const login = async (req, res, next) => {
       )
     );
   }
-  res.json({ message: "Logged In!!", user: existingUser.toObject({ getters: true })  });
+  let isValidPassword = false;
+  try {
+    isValidPassword = await bcrypt.compare(password, existingUser.password);
+  } catch (err) {
+    const error = new httpError(
+      "Could not log you in,please check you credentials",
+      500
+    );
+    return next(error);
+  }
+  if (!isValidPassword) {
+    const error = new httpError(
+      "Could not log you in,please check you credentials",
+      500
+    );
+    return next(error);
+  }
+  try {
+    token = jwt.sign(
+      {
+        userId: existingUser.id,
+        email: existingUser.email,
+      },
+      "secret_within_secret",
+      {
+        expiresIn: "1h",
+      }
+    );
+  } catch (err) {
+    const error = new httpError("Logging in failed!", 500);
+    return next(error);
+  }
+  res.json({
+    userId:existingUser.id,
+    email:existingUser.email,
+    token:token
+  });
 };
 
 exports.getUsers = getUsers;

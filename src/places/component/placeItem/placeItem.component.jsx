@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useHttpClient } from "../../../shared/hooks/http-hook.js";
 import ErrorModal from "../../../shared/uiElements/ErrorModal.jsx";
 import LoadingSpinner from "../../../shared/uiElements/LoadingSpinner.jsx";
@@ -33,15 +33,22 @@ const PlaceItem = (props) => {
 
   const handleDelete = async () => {
     setShowDelete(false);
-    try{
-      await sendRequest(`http://localhost:5000/api/places/${props.id}`,"DELETE");
+    try {
+      await sendRequest(
+        `http://localhost:5000/api/places/${props.id}`,
+        "DELETE",
+        null,
+        {
+          Authorization: "Bearer " + auth.token,
+        }
+      );
       props.onDelete(props.id);
-    }catch(err){}
+    } catch (err) {}
   };
-  console.log(props)
+  console.log(props);
   return (
     <React.Fragment>
-      <ErrorModal error={errMsg} onClear={errorHandler}/>
+      <ErrorModal error={errMsg} onClear={errorHandler} />
       <Modal
         show={showMap}
         close={closeMapModal}
@@ -82,7 +89,7 @@ const PlaceItem = (props) => {
         </div>
       </Modal>
       <div className="place_item">
-        {isLoading && <LoadingSpinner asOverlay/>}
+        {isLoading && <LoadingSpinner asOverlay />}
         <Avatar
           className="place_image"
           image={`http://localhost:5000/${props.image}`}
