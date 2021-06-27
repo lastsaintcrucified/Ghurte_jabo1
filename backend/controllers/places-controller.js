@@ -60,7 +60,7 @@ const getPlacesByUserId = async (req, res, next) => {
 };
 
 const createPlace = async (req, res, next) => {
-  const { title, description, address, creator } = req.body;
+  const { title, description, address } = req.body;
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log(errors);
@@ -81,7 +81,7 @@ const createPlace = async (req, res, next) => {
     co_ordinates: co_ordinates,
     address,
     image: req.file.path,
-    creator,
+    creator:req.userData.userId,
   });
   let user;
   try {

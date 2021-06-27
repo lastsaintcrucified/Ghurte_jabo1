@@ -1,4 +1,4 @@
-import React, { useState, useCallback,useEffect } from "react";
+import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import NewPlace from "./places/pages/newPlace/newPlace.page.jsx";
 import UserPlace from "./places/pages/userPlace/userPlace.page.jsx";
@@ -7,33 +7,13 @@ import MainNavigation from "./shared/navigation/mainNavigation/mainNavigation.co
 import UpdatePlace from "./places/pages/updatePlace/updatePlace.page.jsx";
 import Auth from "./users/pages/authJs/auth.component.jsx";
 import { AuthContext } from "./shared/context/auth-context.js";
+import {useAuth} from "./shared/hooks/auth-hook";
 
 import "./App.css";
 
+
 function App() {
-  const [token, setToken] = useState();
-  const [userId, setUserId] = useState(null);
-
-  const login = useCallback((uid, token) => {
-    setToken(token);
-    setUserId(uid);
-    localStorage.setItem(
-      "userData",
-      JSON.stringify({ userId: uid, token: token })
-    );
-  }, []);
-
-  const logout = useCallback(() => {
-    setToken(null);
-    setUserId(null);
-    localStorage.removeItem('userData');
-  }, []);
-  useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem('userData'));
-    if (storedData && storedData.token) {
-      login(storedData.userId, storedData.token);
-    }
-  }, [login]);
+  const {login,logout,token,userId} = useAuth();
 
   const route1 = (
     <Switch>
