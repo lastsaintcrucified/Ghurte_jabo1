@@ -1,0 +1,21 @@
+.place-form {
+  padding: 1rem;
+  width: 90%;
+  max-width: 40rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  border-radius: 6px;
+  background: white;
+}
+.disabled_class {
+  background-color: #cccccc !important;
+  color: #afb1b4 !important;
+  cursor: none !important;
+}
+.form_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 20px;
+}
