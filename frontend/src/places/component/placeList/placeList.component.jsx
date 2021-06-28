@@ -4,7 +4,7 @@ import PlaceItem from "../placeItem/placeItem.component.jsx";
 
 import "./placeList.styles.css";
 const PlaceList = (props) => {
-  if (props.items.length === 0) {
+  if ( props.items && props.items.length === 0) {
     return (
       <div className="center">
         <h1>No Place has been added, Maybe create One?</h1>

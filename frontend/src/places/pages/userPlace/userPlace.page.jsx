@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import {history} from "react-dom";
 import { useHttpClient } from "../../../shared/hooks/http-hook.js";
 import ErrorModal from "../../../shared/uiElements/ErrorModal.jsx";
 import LoadingSpinner from "../../../shared/uiElements/LoadingSpinner.jsx";
@@ -27,12 +28,14 @@ const UserPlace = () => {
   const placeDeleteHandler = (deletedPlaceId) =>{
       setLoadedPlace(prevPlaces=>prevPlaces.filter(place=>place.id!==deletedPlaceId))
   }
+  
   return (
     <React.Fragment>
       <ErrorModal error={errMsg} onClear={errorHandler} />
       <div className="user_place">
         {isLoading && <LoadingSpinner asOverlay />}
         {!isLoading && loadedPlace && <PlaceList items={loadedPlace} onDeletePlace={placeDeleteHandler}/>}
+        
       </div>
     </React.Fragment>
   );
