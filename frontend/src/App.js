@@ -1,19 +1,33 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import NewPlace from "./places/pages/newPlace/newPlace.page.jsx";
-import UserPlace from "./places/pages/userPlace/userPlace.page.jsx";
-import User from "./users/pages/users.page.jsx";
+// import NewPlace from "./places/pages/newPlace/newPlace.page.jsx";
+// import UserPlace from "./places/pages/userPlace/userPlace.page.jsx";
+// import User from "./users/pages/users.page.jsx";
+// import UpdatePlace from "./places/pages/updatePlace/updatePlace.page.jsx";
+// import Auth from "./users/pages/authJs/auth.component.jsx";
 import MainNavigation from "./shared/navigation/mainNavigation/mainNavigation.component.jsx";
-import UpdatePlace from "./places/pages/updatePlace/updatePlace.page.jsx";
-import Auth from "./users/pages/authJs/auth.component.jsx";
 import { AuthContext } from "./shared/context/auth-context.js";
-import {useAuth} from "./shared/hooks/auth-hook";
+import { useAuth } from "./shared/hooks/auth-hook";
 
 import "./App.css";
+import LoadingSpinner from "./shared/uiElements/LoadingSpinner.jsx";
 
+const User = React.lazy(() => import("./users/pages/users.page.jsx"));
+const UserPlace = React.lazy(() =>
+  import("./places/pages/userPlace/userPlace.page.jsx")
+);
+const NewPlace = React.lazy(() =>
+  import("./places/pages/newPlace/newPlace.page.jsx")
+);
+const UpdatePlace = React.lazy(() =>
+  import("./places/pages/updatePlace/updatePlace.page.jsx")
+);
+const Auth = React.lazy(() =>
+  import("./users/pages/authJs/auth.component.jsx")
+);
 
 function App() {
-  const {login,logout,token,userId} = useAuth();
+  const { login, logout, token, userId } = useAuth();
 
   const route1 = (
     <Switch>
@@ -60,7 +74,15 @@ function App() {
         }}
       >
         <MainNavigation />
-        {routes}
+        <Suspense
+          fallback={
+            <div className="center">
+              <LoadingSpinner asOverlay />
+            </div>
+          }
+        >
+          {routes}
+        </Suspense>
       </AuthContext.Provider>
     </div>
   );
