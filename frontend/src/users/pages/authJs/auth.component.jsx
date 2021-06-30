@@ -16,6 +16,7 @@ import { AuthContext } from "../../../shared/context/auth-context.js";
 import "./auth.styles.css";
 
 const Auth = () => {
+
   const auth = useContext(AuthContext);
   const [loginMode, setLoginMode] = useState(true);
   const { isLoading, errMsg, sendRequest, errorHandler } = useHttpClient();
