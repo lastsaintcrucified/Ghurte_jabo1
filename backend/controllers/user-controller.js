@@ -82,11 +82,13 @@ const signUp = async (req, res, next) => {
     );
     return next(error);
   }
+  const fileName = req.file.filename;
+  const basePath = `${req.protocol}://${req.get('host')}/public/images/`;
   const createdUser = new User({
     name,
     email,
     password: hashedPassword,
-    image: req.file.path,
+    image: `${basePath}${fileName}`,
     places: [],
   });
   try {
