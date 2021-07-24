@@ -74,7 +74,7 @@ const createPlace = async (req, res, next) => {
   } catch (error) {
     return next(error);
   }
-  console.log(co_ordinates);
+//   console.log(co_ordinates);
   const fileName = req.file.filename;
   const basePath = `${req.protocol}://${req.get('host')}/public/images/`;
   const createdPlace = new Place({
