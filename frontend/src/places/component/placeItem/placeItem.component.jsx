@@ -45,7 +45,7 @@ const PlaceItem = (props) => {
       props.onDelete(props.id);
     } catch (err) {}
   };
-  console.log(props);
+  // console.log(props);
   return (
     <React.Fragment>
       <ErrorModal error={errMsg} onClear={errorHandler} />

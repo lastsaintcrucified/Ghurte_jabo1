@@ -50,7 +50,7 @@ const Auth = () => {
             "Content-Type": "application/json",
           }
         );
-        console.log(data);
+        // console.log(data);
         auth.login(data.userId,data.token);
       } catch (error) {}
 

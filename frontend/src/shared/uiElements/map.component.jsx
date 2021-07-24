@@ -1,8 +1,10 @@
 import React from "react";
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-
+import mapboxgl from 'mapbox-gl'
 import "./map.styles.css";
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 const map_container = {
     height:"55vh",
