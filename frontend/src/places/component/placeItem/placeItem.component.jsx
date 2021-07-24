@@ -92,7 +92,7 @@ const PlaceItem = (props) => {
         {isLoading && <LoadingSpinner asOverlay />}
         <Avatar
           className="place_image"
-          image={`${process.env.REACT_APP_ASSET_URL}/${props.image}`}
+          image={`${props.image}`}
           name={props.title}
         />
         <div className="place_item_info">

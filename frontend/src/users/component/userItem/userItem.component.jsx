@@ -9,7 +9,7 @@ const UserItem = (props) =>{
             <div className="user_item">
                 <Link to={`/${props.id}/places`}>
                     <div className="user_item_image">
-                        <Avatar image={`${process.env.REACT_APP_ASSET_URL}/${props.image}`} name={props.name}/>
+                        <Avatar image={`${props.image}`} name={props.name}/>
                     </div>
                     <div className="user_item_info">
                         <h2>{props.name}</h2>

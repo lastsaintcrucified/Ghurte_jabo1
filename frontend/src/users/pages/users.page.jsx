@@ -18,7 +18,7 @@ const User = () => {
     }
     fetchUser();
   }, [sendRequest]);
- 
+//  console.log(loadedUser)
   return (
     <React.Fragment>
       <ErrorModal error={errMsg} onClear={errorHandler} />
