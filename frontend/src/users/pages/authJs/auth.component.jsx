@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import Input from "../../../shared/uiElements/input.component.jsx";
+import axios from "axios";
 import { useForm } from "../../../shared/hooks/form-hook.js";
 import { useHttpClient } from "../../../shared/hooks/http-hook.js";
 import ImageUpload from "../../../shared/uiElements/imageUpload.component.jsx";
@@ -16,7 +17,6 @@ import { AuthContext } from "../../../shared/context/auth-context.js";
 import "./auth.styles.css";
 
 const Auth = () => {
-
   const auth = useContext(AuthContext);
   const [loginMode, setLoginMode] = useState(true);
   const { isLoading, errMsg, sendRequest, errorHandler } = useHttpClient();
@@ -33,6 +33,17 @@ const Auth = () => {
     },
     false
   );
+  const uploadImage = (img) => {
+    let body = new FormData();
+    body.set("key", "ca81e881015680cdcde5d4b160f8ef4d");
+    body.append("image", img);
+
+    return axios({
+      method: "post",
+      url: "https://api.imgbb.com/1/upload",
+      data: body,
+    });
+  };
   const submitHandler = async (event) => {
     event.preventDefault();
     // console.log(state.inputs);
@@ -51,7 +62,7 @@ const Auth = () => {
           }
         );
         // console.log(data);
-        auth.login(data.userId,data.token);
+        auth.login(data.userId, data.token);
       } catch (error) {}
 
       // console.log(loginData)
@@ -67,8 +78,10 @@ const Auth = () => {
           "POST",
           formData
         );
-        console.log(data);
-        auth.login(data.userId,data.token);
+        // console.log(data);
+        // auth.login(data.userId, data.token);
+        const imbb = await uploadImage(state.inputs.image.value);
+        console.log(imbb.data.data.display_url);
       } catch (err) {}
     }
   };

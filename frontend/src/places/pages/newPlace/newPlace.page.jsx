@@ -6,6 +6,7 @@ import ImageUpload from "../../../shared/uiElements/imageUpload.component.jsx";
 import ErrorModal from "../../../shared/uiElements/ErrorModal.jsx";
 import LoadingSpinner from "../../../shared/uiElements/LoadingSpinner.jsx";
 import { AuthContext } from "../../../shared/context/auth-context.js";
+import axios from "axios";
 import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH,
@@ -33,33 +34,45 @@ const NewPlace = () => {
         value: "",
         isValid: false,
       },
-      image:{
-        value:null,
-        isValid:false
-      }
+      image: {
+        value: null,
+        isValid: false,
+      },
     },
     false
   );
+  const uploadImage = (img) => {
+    let body = new FormData();
+    body.set("key", "ca81e881015680cdcde5d4b160f8ef4d");
+    body.append("image", img);
+
+    return axios({
+      method: "post",
+      url: "https://api.imgbb.com/1/upload",
+      data: body,
+    });
+  };
 
   const submitHandler = async (event) => {
     event.preventDefault();
-    console.log("state-->", state);
+    // console.log("state-->", state);
     try {
+      const imbb = await uploadImage(state.inputs.image.value);
       const formData = new FormData();
       formData.append("title", state.inputs.title.value);
       formData.append("description", state.inputs.description.value);
       formData.append("address", state.inputs.address.value);
-      formData.append("creator",  auth.userId);
-      formData.append("image", state.inputs.image.value);
+      formData.append("creator", auth.userId);
+      formData.append("image", imbb.data.data.display_url);
       const data = await sendRequest(
         `${process.env.REACT_APP_BACKEND_URL}/places`,
         "POST",
         formData,
         {
-          Authorization: "Bearer "+auth.token
+          Authorization: "Bearer " + auth.token,
         }
       );
-      console.log(data);
+
       history.push("/");
     } catch (err) {}
   };
