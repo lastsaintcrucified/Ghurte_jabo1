@@ -41,29 +41,29 @@ const NewPlace = () => {
     },
     false
   );
-  // const uploadImage = (img) => {
-  //   let body = new FormData();
-  //   body.set("key", "ca81e881015680cdcde5d4b160f8ef4d");
-  //   body.append("image", img);
+  const uploadImage = (img) => {
+    let body = new FormData();
+    body.set("key", "ca81e881015680cdcde5d4b160f8ef4d");
+    body.append("image", img);
 
-  //   return axios({
-  //     method: "post",
-  //     url: "https://api.imgbb.com/1/upload",
-  //     data: body,
-  //   });
-  // };
+    return axios({
+      method: "post",
+      url: "https://api.imgbb.com/1/upload",
+      data: body,
+    });
+  };
 
   const submitHandler = async (event) => {
     event.preventDefault();
     // console.log("state-->", state);
     try {
-      // const imbb = await uploadImage(state.inputs.image.value);
+      const imbb = await uploadImage(state.inputs.image.value);
       const formData = new FormData();
       formData.append("title", state.inputs.title.value);
       formData.append("description", state.inputs.description.value);
       formData.append("address", state.inputs.address.value);
       formData.append("creator", auth.userId);
-      formData.append("image", state.inputs.image.value);
+      formData.append("image", await imbb.data.data.display_url);
       const data = await sendRequest(
         `${process.env.REACT_APP_BACKEND_URL}/places`,
         "POST",
