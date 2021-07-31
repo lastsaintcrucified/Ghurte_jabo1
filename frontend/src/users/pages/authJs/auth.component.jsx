@@ -33,17 +33,17 @@ const Auth = () => {
     },
     false
   );
-  const uploadImage = (img) => {
-    let body = new FormData();
-    body.set("key", "ca81e881015680cdcde5d4b160f8ef4d");
-    body.append("image", img);
+  // const uploadImage = (img) => {
+  //   let body = new FormData();
+  //   body.set("key", "ca81e881015680cdcde5d4b160f8ef4d");
+  //   body.append("image", img);
 
-    return axios({
-      method: "post",
-      url: "https://api.imgbb.com/1/upload",
-      data: body,
-    });
-  };
+  //   return axios({
+  //     method: "post",
+  //     url: "https://api.imgbb.com/1/upload",
+  //     data: body,
+  //   });
+  // };
   const submitHandler = async (event) => {
     event.preventDefault();
     // console.log(state.inputs);
@@ -68,7 +68,9 @@ const Auth = () => {
       // console.log(loginData)
     } else {
       try {
+        // const imbb = await uploadImage(state.inputs.image.value);
         const formData = new FormData();
+
         formData.append("email", state.inputs.email.value);
         formData.append("name", state.inputs.name.value);
         formData.append("password", state.inputs.password.value);
@@ -78,10 +80,11 @@ const Auth = () => {
           "POST",
           formData
         );
+
         // console.log(data);
         // auth.login(data.userId, data.token);
-        const imbb = await uploadImage(state.inputs.image.value);
-        console.log(imbb.data.data.display_url);
+
+        // console.log(imbb.data.data.display_url);
       } catch (err) {}
     }
   };
