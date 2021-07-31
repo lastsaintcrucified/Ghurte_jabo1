@@ -95,9 +95,9 @@ const Auth = () => {
         //   "POST",
         //   formData
         // );
-
-        console.log(response);
-        auth.login(data.userId, data.token);
+        const responseData = await response.json();
+        // console.log(responseData);
+        auth.login(responseData.userId, responseData.token);
 
         // console.log(imbb.data.data.display_url);
       } catch (err) {}
