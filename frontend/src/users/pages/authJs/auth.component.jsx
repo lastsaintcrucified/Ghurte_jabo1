@@ -69,19 +69,34 @@ const Auth = () => {
     } else {
       try {
         const imbb = await uploadImage(state.inputs.image.value);
-        const formData = new FormData();
-
-        formData.append("email", state.inputs.email.value);
-        formData.append("name", state.inputs.name.value);
-        formData.append("password", state.inputs.password.value);
-        formData.append("image", imbb.data.data.display_url);
-        const data = await sendRequest(
+        const response = await fetch(
           `${process.env.REACT_APP_BACKEND_URL}/users/signup`,
-          "POST",
-          formData
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name: state.inputs.name.value,
+              email: state.inputs.email.value,
+              password: state.inputs.password.value,
+              image: imbb.data.data.display_url,
+            }),
+          }
         );
+        // const formData = new FormData();
+        // formData.append("email", state.inputs.email.value);
+        // formData.append("name", state.inputs.name.value);
+        // formData.append("password", state.inputs.password.value);
+        // // console.log(imbb.data.data.display_url);
+        // formData.append("image", imbb.data.data.display_url);
+        // const data = await sendRequest(
+        //   `${process.env.REACT_APP_BACKEND_URL}/users/signup`,
+        //   "POST",
+        //   formData
+        // );
 
-        // console.log(data);
+        console.log(response);
         // auth.login(data.userId, data.token);
 
         // console.log(imbb.data.data.display_url);

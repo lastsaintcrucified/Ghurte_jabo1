@@ -58,20 +58,37 @@ const NewPlace = () => {
     // console.log("state-->", state);
     try {
       const imbb = await uploadImage(state.inputs.image.value);
-      const formData = new FormData();
-      formData.append("title", state.inputs.title.value);
-      formData.append("description", state.inputs.description.value);
-      formData.append("address", state.inputs.address.value);
-      formData.append("creator", auth.userId);
-      formData.append("image", await imbb.data.data.display_url);
-      const data = await sendRequest(
+      const response = await fetch(
         `${process.env.REACT_APP_BACKEND_URL}/places`,
-        "POST",
-        formData,
         {
-          Authorization: "Bearer " + auth.token,
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          },
+          body: JSON.stringify({
+            title: state.inputs.title.value,
+            description: state.inputs.description.value,
+            address: state.inputs.address.value,
+            creator: auth.userId,
+            image: imbb.data.data.display_url,
+          }),
         }
       );
+      // const formData = new FormData();
+      // formData.append("title", state.inputs.title.value);
+      // formData.append("description", state.inputs.description.value);
+      // formData.append("address", state.inputs.address.value);
+      // formData.append("creator", auth.userId);
+      // formData.append("image", await imbb.data.data.display_url);
+      // const data = await sendRequest(
+      //   `${process.env.REACT_APP_BACKEND_URL}/places`,
+      //   "POST",
+      //   formData,
+      //   {
+      //     Authorization: "Bearer " + auth.token,
+      //   }
+      // );
 
       history.push("/");
     } catch (err) {}
