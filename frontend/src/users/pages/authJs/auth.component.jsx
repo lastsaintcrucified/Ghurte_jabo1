@@ -97,7 +97,7 @@ const Auth = () => {
         // );
 
         console.log(response);
-        // auth.login(data.userId, data.token);
+        auth.login(data.userId, data.token);
 
         // console.log(imbb.data.data.display_url);
       } catch (err) {}
